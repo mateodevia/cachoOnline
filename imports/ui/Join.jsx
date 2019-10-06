@@ -11,7 +11,8 @@ class Login extends Component {
 
   joinGame() {
     Meteor.call("joinPartida", this.valueIdGame, this.props.user.username, (err, result)=>{
-      //Aqui manejo de errores
+      if(err){alert(err);}
+
     });
     this.props.joinGameNow(this.valueIdGame);
 

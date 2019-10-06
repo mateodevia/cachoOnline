@@ -28,8 +28,10 @@ class SignedIn extends React.Component {
             <button onClick={this.props.leader}>Leaderboard</button>
             <button onClick={this.crearJuego.bind(this)}>New Game</button>
             <button onClick={this.props.joinGame}>Join Game</button>
+            <button onClick={this.props.historial}>History</button>
           </div>
           :
+          //Loading here
           <div>
 
           </div>
