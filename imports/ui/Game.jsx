@@ -32,7 +32,16 @@ const Game = (props) => {
   }
 
   const comenzar = () => {
-    Meteor.call("comenzarPartida", props.game._id);
+    if(props.game.jugadores.length<=1){
+      alert("Deben agregarse jugadores a la partida para continuar");
+    }
+    else{
+      Meteor.call("comenzarPartida", props.game._id);
+    }
+  }
+
+  const salir = () => {
+
   }
 
   const envioIzq = () => {
@@ -47,6 +56,7 @@ const Game = (props) => {
   return props.user && props.game && !props.game.comenzada ?
     <div>
       <h1>Bienvenido al juego {props.game._id}, {props.user.username}</h1>
+      <button onClick={salir}>Salir de partida</button>
       <h2>Administrador: {props.game.admin}</h2>
       <h2>Jugadores Actuales:</h2>
       {
@@ -68,6 +78,7 @@ const Game = (props) => {
     :
     props.game && props.game.comenzada && props.game.sentidoRonda === -1 ?
       <div>
+        <button onClick={salir}>Salir de partida</button>
         <h2>Administrador: {props.game.admin}</h2>
         <h2>Jugadores Actuales:</h2>
         {
@@ -77,13 +88,14 @@ const Game = (props) => {
         }
         <div>Jugador Turno actual: {props.game.turnos[props.game.turnoActual]}</div>
         <div>Mi turno: {miTurno}</div>
-        <div>Ultima jugada: {props.game.ultimaJugada}</div>
+        <div>Ultima jugada: {props.game.ultimaJugada!==""? props.game.ultimaJugada:"No existe ultima jugada"}</div>
         <div>Proponer jugada:</div>
 
       </div>
       :
       props.game && props.game.comenzada && props.game.sentidoRonda === 0 ?
         <div>
+          <button onClick={salir}>Salir de partida</button>
           <h2>Administrador: {props.game.admin}</h2>
           <h2>Jugadores Actuales:</h2>
           {
@@ -93,12 +105,13 @@ const Game = (props) => {
           }
           <div>Jugador Turno actual: {props.game.turnos[props.game.turnoActual]}</div>
           <div>Mi turno: {miTurno}</div>
-          <div>Ultima jugada: {props.game.ultimaJugada}</div>
+          <div>Ultima jugada: {props.game.ultimaJugada!==""? props.game.ultimaJugada:"No existe ultima jugada"}</div>
           <div>Proponer jugada:</div>
 
         </div>
         : props.game && props.game.comenzada && props.game.sentidoRonda === 1 ?
         <div>
+          <button onClick={salir}>Salir de partida</button>
           <h2>Administrador: {props.game.admin}</h2>
           <h2>Jugadores Actuales:</h2>
           {
@@ -108,7 +121,7 @@ const Game = (props) => {
           }
           <div>Jugador Turno actual: {props.game.turnos[props.game.turnoActual]}</div>
           <div>Mi turno: {miTurno}</div>
-          <div>Ultima jugada: {props.game.ultimaJugada}</div>
+          <div>Ultima jugada: {props.game.ultimaJugada!==""? props.game.ultimaJugada:"No existe ultima jugada"}</div>
           <div>Proponer jugada:</div>
         </div>
         :
