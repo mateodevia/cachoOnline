@@ -2,3 +2,19 @@ body {
   padding: 10px;
   font-family: sans-serif;
 }
+
+.texto {
+  margin-top: 3rem;
+  width: 45%;
+  display: inline-block;
+  margin-left: 30%;
+  font-size: 1.4rem;
+}
+
+#welcome {
+  margin-top: 3%;   
+}
+
+button {
+  margin: 1%;
+}

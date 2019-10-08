@@ -32,24 +32,25 @@ class Login extends Component {
     if (this.state.error) {
       return (
         <div>
-          <div>
-            Inténtelo de nuevo
-          </div>
+
           <form>
-            User: <input className="form-control" onChange={this.onChangeUser.bind(this)} type="text" />
-            Password: <input className="form-control" onChange={this.onChangePass.bind(this)} type="password" />
+            Usuario: <input className="form-control" onChange={this.onChangeUser.bind(this)} type="text" />
+            Contraseña: <input className="form-control" onChange={this.onChangePass.bind(this)} type="password" />
           </form>
-          <button className="btn btn-outline-success" onClick={this.logIn.bind(this)}>Log in</button>
+          <div class="text-danger">
+            Has introducido usuario o contraseña incorrectos
+          </div>
+          <button class="btn"className="btn btn-outline-success" onClick={this.logIn.bind(this)}>Log in</button>
         </div>
       );
     }
     return (
       <div>
         <form>
-          User: <input className="form-control" onChange={this.onChangeUser.bind(this)} type="text" />
-          Password: <input className="form-control" onChange={this.onChangePass.bind(this)} type="password" />
+          Usuario: <input className="form-control" onChange={this.onChangeUser.bind(this)} type="text" />
+          Contraseña: <input className="form-control" onChange={this.onChangePass.bind(this)} type="password" />
         </form>
-        <button className="btn btn-outline-success" onClick={this.logIn.bind(this)}>Log in</button>
+        <button class="btn"className="btn btn-outline-success" onClick={this.logIn.bind(this)}>Inicia sesión</button>
       </div>
     );
   }

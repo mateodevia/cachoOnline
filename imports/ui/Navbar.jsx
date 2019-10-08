@@ -15,7 +15,7 @@ class Info extends Component {
             <div className="form-inline">
               Hello, {this.props.user.username}
             </div>
-            <button className="btn btn-outline-success my-2 my-sm-0" type="submit" onClick={this.props.logout}>Logout</button>
+            <button class="btn" className="btn btn-outline-success my-2 my-sm-0" type="submit" onClick={this.props.logout}>Cerrar sesión</button>
           </nav>
         </div>
       );
@@ -23,10 +23,11 @@ class Info extends Component {
     else {
       return (
         <div>
-          <nav className="navbar navbar-light bg-light">
-            <form className="form-inline">
-              <button className="btn btn-outline-success my-2 my-sm-0" type="submit" onClick={this.props.login}>Login</button>
-              <button className="btn btn-outline-success my-2 my-sm-0" type="submit" onClick={this.props.register}>Signup</button>
+          <nav class="navbar navbar-light bg-light">
+            <a class="navbar-brand" href="/">Cacho</a>
+            <form class="form-inline">
+              <button class="btn" className="btn btn-outline-success my-2 my-sm-0" type="submit" onClick={this.props.register}>Regístrate</button>
+              <button class="btn" className="btn btn-outline-success my-2 my-sm-0" type="submit" onClick={this.props.login}>Inicia sesión</button>
             </form>
           </nav>
         </div>
