@@ -15,7 +15,8 @@
     "react": "^16.5.0",
     "react-dom": "^16.5.0",
     "react-router": "^5.1.0",
-    "react-router-dom": "^5.1.0"
+    "react-router-dom": "^5.1.0",
+    "use-state-with-callback": "^1.0.18"
   },
   "meteor": {
     "mainModule": {

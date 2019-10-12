@@ -18,3 +18,24 @@ body {
 button {
   margin: 1%;
 }
+a {
+  color: black !important;
+  text-decoration: none;
+  background-color: transparent;
+}
+
+#containerSignedIn button {
+  margin: 1rem;
+}
+
+.leaderboard {
+  margin-left: 1rem;
+}
+#text-center button {
+  margin-right: 2rem;
+}
+
+.salir {
+  margin-bottom: 1rem;
+  margin-top: 2rem;
+}

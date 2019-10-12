@@ -12,10 +12,12 @@ class Info extends Component {
       return (
         <div>
           <nav className="navbar navbar-light bg-light">
-            <div className="form-inline">
-              Hello, {this.props.user.username}
+            <a className="navbar-brand" href="/">Cacho</a>
+            <div className="form-inline my-2 my-lg-0">
+              <button className="btn" className="btn btn-outline-success my-2 my-sm-0" type="submit" onClick={this.props.logout}>Cerrar sesión</button>
             </div>
-            <button class="btn" className="btn btn-outline-success my-2 my-sm-0" type="submit" onClick={this.props.logout}>Cerrar sesión</button>
+
+
           </nav>
         </div>
       );
@@ -23,11 +25,11 @@ class Info extends Component {
     else {
       return (
         <div>
-          <nav class="navbar navbar-light bg-light">
-            <a class="navbar-brand" href="/">Cacho</a>
-            <form class="form-inline">
-              <button class="btn" className="btn btn-outline-success my-2 my-sm-0" type="submit" onClick={this.props.register}>Regístrate</button>
-              <button class="btn" className="btn btn-outline-success my-2 my-sm-0" type="submit" onClick={this.props.login}>Inicia sesión</button>
+          <nav className="navbar navbar-light bg-light">
+            <a className="navbar-brand" href="/">Cacho</a>
+            <form className="form-inline">
+              <button className="btn" className="btn btn-outline-success my-2 my-sm-0" type="submit" onClick={this.props.register}>Regístrate</button>
+              <button className="btn" className="btn btn-outline-success my-2 my-sm-0" type="submit" onClick={this.props.login}>Inicia sesión</button>
             </form>
           </nav>
         </div>

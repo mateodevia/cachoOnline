@@ -5,8 +5,8 @@ import { withTracker } from "meteor/react-meteor-data";
 
 const LeaderBoard = (props) => {
   return props.user?
-  <div>
-    <h1>LeaderBoard</h1>
+  <div className="leaderboard">
+    <h3>LeaderBoard</h3>
   </div>
   :
   <div>

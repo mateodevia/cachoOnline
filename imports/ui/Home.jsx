@@ -6,7 +6,7 @@ import { withTracker } from "meteor/react-meteor-data";
 const Home = (props) => {
   return props.user?
   <div>
-    <h1>Bienvenido a Cacho, {props.user.profile.nombre}</h1>
+    <h1>Bienvenido a Cacho {props.user.profile.nombre}</h1>
     <SignedIn game={props.game} leader={props.leader} joinGame={props.joinGame} joinGameNow={props.joinGameNow} historial={props.historial}/>
   </div>
   :

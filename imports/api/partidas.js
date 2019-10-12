@@ -37,6 +37,10 @@ function shuffle(array) {
   return array;
 }
 
+function mod(a,b) {
+  return (a % b + b)%b;
+}
+
 Meteor.methods({
 
   createPartida: function(admin){
@@ -51,6 +55,7 @@ Meteor.methods({
       terminada: false,
       ganador: undefined,
       turnoActual:-1,
+      //sentido derecha: 0 --- sentido izquierda: 1
       sentidoRonda:-1,
       ultimaJugada:""
     });
@@ -88,7 +93,7 @@ Meteor.methods({
       throw new Meteor.Error("No existe la partida");
     }
     else if(res.comenzada){
-      throw new Meteor.Error("La partida ya comenzó");
+      throw new Meteor.Error("La partida ya comenzó",Partidas.rawDatabase);
     }
     else{
       res.jugadores.push(idJugador);
@@ -97,5 +102,29 @@ Meteor.methods({
       res2.profile.juegos.push(idPartida);
       Meteor.users.update({username:idJugador},res2);
     }
+  },
+  apostar: function(apuesta, idPartida) {
+    let res= Partidas.findOne({_id:idPartida});
+    res.ultimaJugada = apuesta;
+    Partidas.update({_id:idPartida},res);
+  },
+  asignarSentido: function(idPartida, sentido) {
+    let res= Partidas.findOne({_id:idPartida});
+    res.sentidoRonda = sentido;
+    Partidas.update({_id:idPartida},res);
+  },
+  cambiarTurno: function(idPartida) {
+    let res= Partidas.findOne({_id:idPartida});
+    if(res.sentidoRonda===0) {
+      let a = res.turnoActual+1;
+      let b = res.jugadores.length;
+      res.turnoActual = mod(a,b);
+    }
+    else if(res.sentidoRonda===1) {
+      let a = res.turnoActual-1;
+      let b = res.jugadores.length;
+      res.turnoActual = mod(a,b);
+    }
+    Partidas.update({_id:idPartida},res);    
   }
 });
