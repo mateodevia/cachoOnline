@@ -57,7 +57,8 @@ Meteor.methods({
       turnoActual:-1,
       //sentido derecha: 0 --- sentido izquierda: 1
       sentidoRonda:-1,
-      ultimaJugada:""
+      ultimaJugada:"",
+      ultimaJugadaAprobada : false
     });
     let res2= Meteor.users.findOne({_id:this.userId});
     res2.profile.juegos.push(a);
@@ -83,6 +84,9 @@ Meteor.methods({
     Partidas.update({_id:idPartida},res);
   },
 
+  //HISTORICO  db.users.findOne({username:"luznelly"}).profile.juegos
+
+
   joinPartida: function(idPartida, idJugador){
 
     let res= Partidas.findOne({_id:idPartida});
@@ -103,10 +107,16 @@ Meteor.methods({
       Meteor.users.update({username:idJugador},res2);
     }
   },
-  apostar: function(apuesta, idPartida) {
+
+  apostar: function(cantidad, pinta, idPartida) {
     let res= Partidas.findOne({_id:idPartida});
-    res.ultimaJugada = apuesta;
-    Partidas.update({_id:idPartida},res);
+    console.log(cantidad, pinta);
+
+    // if(res.ultimaJugadaAprobada) {
+      let apuesta = cantidad+" "+pinta;
+      res.ultimaJugada = apuesta;
+      Partidas.update({_id:idPartida},res);
+    //}   
   },
   asignarSentido: function(idPartida, sentido) {
     let res= Partidas.findOne({_id:idPartida});
@@ -126,5 +136,57 @@ Meteor.methods({
       res.turnoActual = mod(a,b);
     }
     Partidas.update({_id:idPartida},res);    
+  },
+  setDudarFalse: function(idPartida) {
+    let res= Partidas.findOne({_id:idPartida});
+    res.ultimaJugadaAprobada = false;
+    Partidas.update({_id:idPartida},res);
+  },
+  dudar: function(cantidad, pinta, idPartida) {
+    let res= Partidas.findOne({_id:idPartida});
+    let valorPinta = 0;
+    let contador = 0;
+    if(pinta === 'as'){
+      valorPinta = 1;
+    }
+    else if(pinta === 'pato') {
+      valorPinta = 2;
+    }
+    else if(pinta === 'tren') {
+      valorPinta = 3;
+    }
+    else if(pinta === 'perro') {
+      valorPinta = 4;
+    }
+    else if(pinta === 'quina') {
+      valorPinta = 5;
+    }
+    else if(pinta === 'cena') {
+      valorPinta = 6;
+    }
+    let a = res.dados.length
+    for( let i=0 ; i<a ; ++i) {
+      let b = res.dados[i];
+      for(let j=0 ; j<b.length; ++j) {
+        if(parseInt(res.dados[i][j]) === valorPinta || parseInt(res.dados[i][j]) === 1) {
+          contador++;
+        }
+      }
+    }
+    console.log("La apuesta es", cantidad, pinta );
+    console.log("hay", contador, "de", pinta,  contador >= cantidad);
+
+    if(contador >= cantidad) {
+     // Partidas.update({_id:idPartida},{$set:{ultimaJugadaAprobada:true}});
+      res.ultimaJugadaAprobada = true;
+    }
+    else {
+      //Partidas.update({_id:idPartida},{$set:{ultimaJugadaAprobada:false}});
+      res.ultimaJugadaAprobada = false;
+    }
+    Partidas.update({_id:idPartida},res);
+    console.log(res.ultimaJugadaAprobada);
   }
 });
+
+

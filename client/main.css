@@ -39,3 +39,6 @@ a {
   margin-bottom: 1rem;
   margin-top: 2rem;
 }
+.form button {
+  margin-left: 0.5rem;
+}

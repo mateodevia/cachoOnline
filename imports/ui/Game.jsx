@@ -13,12 +13,9 @@ const Game = (props) => {
   const [pinta, setPinta] = useState("");
   const [sentido, setSentido] = useState(-1);
   const [numDados, setNumDados] = useState(6);
+  const [errorApuesta, setErrorApuesta] = useState(false);
   let cuidado = true;
-  const [puedeApostar, setPuedeApostar] = useStateWithCallback("true", () => {
-    if (!cuidado) {
-      verificarApuesta();
-    }
-  });
+  const [puedeApostar, setPuedeApostar] = useState("true");
   let cantidadTemp = 0;
 
 
@@ -51,6 +48,10 @@ const Game = (props) => {
     }
     else{
       Meteor.call("comenzarPartida", props.game._id);
+      for(let i=0; i<props.game.numDados.length;++i) {
+        setNumDados(numDados + props.game.numDados[i]);
+      }
+     
     }
   }
 
@@ -78,7 +79,8 @@ const Game = (props) => {
     e.preventDefault();
     cuidado = false;
     await apostar();
-    Meteor.call("cambiarTurno", props.game._id);
+    console.log(puedeApostar==="true" , puedeApostar)
+    
 
   }
 
@@ -130,46 +132,53 @@ const Game = (props) => {
 
     let x = (ultimaCantidad * 2)+1;
     if(valorUltimaPinta===0) {
-      setPuedeApostar( "true");
+      setPuedeApostar("true");
+      console.log(puedeApostar);
       verificarApuesta();
     }
     else if(cantidad > ultimaCantidad && valorPinta!==1 && valorUltimaPinta!==1) {
-      setPuedeApostar( "true");
+      setPuedeApostar("true");
+      console.log(puedeApostar);
       verificarApuesta();
     }
     else if(cantidad > ultimaCantidad && valorPinta===1 && valorUltimaPinta===1) {
-      setPuedeApostar( "true");      
+      setPuedeApostar("true");
+      console.log(puedeApostar);
       verificarApuesta();
     }
     else if(cantidad >= Math.floor( ultimaCantidad / 2 )+1 && valorPinta===1 && valorUltimaPinta!==1) {
-      setPuedeApostar( "true");
+      setPuedeApostar("true");
+      console.log(puedeApostar);
       verificarApuesta();
     }
-    else if(cantidad === ultimaCantidad && valorPinta > valorUltimaPinta) {
-      setPuedeApostar( "true");
+    else if(cantidad >= ultimaCantidad && valorPinta > valorUltimaPinta) {
+      setPuedeApostar("true");
+      console.log(puedeApostar);
       verificarApuesta();
     }
     else if(cantidad >= Math.floor( ultimaCantidad / 2 )+1 && valorPinta===1 && valorUltimaPinta!==1) {
-      setPuedeApostar( "true");
+      setPuedeApostar("true");
+      console.log(puedeApostar);
       verificarApuesta();
     }
     else if(cantidad >=x && valorPinta!==1 && valorUltimaPinta===1) {
-      setPuedeApostar( "true");
+      setPuedeApostar("true");
+      console.log(puedeApostar);
       verificarApuesta();
     }
     else {
+      console.log("no?");
+      console.log(cuidado);
       setPuedeApostar("false");
     }
-    
-   
+    console.log("si puede?",puedeApostar);
   }
 
   const verificarApuesta = () => {
+    console.log(puedeApostar);
+      Meteor.call("apostar", cantidad,pinta, props.game._id);
+    Meteor.call("cambiarTurno", props.game._id);
     
-    if(puedeApostar === "true") {
-      Meteor.call("apostar", cantidad+" "+pinta, props.game._id);
-     
-    }
        cantidadDados();
   }
 
@@ -199,6 +208,30 @@ const Game = (props) => {
     }
     setNumDados(dados);
   }
+
+ 
+  const dudar = () => {
+    Meteor.call("setDudarFalse", props.game._id, (error, result) => {
+      if (error) {
+        return alert(error.reason);
+      }
+      console.log("antes",props.game.ultimaJugadaAprobada);
+
+      let ultima = props.game.ultimaJugada;
+      let ultimaCantidad = parseInt(ultima.split(" ")[0]);
+      let ultimaPinta = ultima.split(" ")[1];
+      
+      Meteor.call("dudar", ultimaCantidad, ultimaPinta, props.game._id, (error, result) => {
+        if (error) {
+          return alert(error.reason);
+        }
+        else {
+              console.log("despues",props.game.ultimaJugadaAprobada);
+              console.log("Jugada no aprobada:",props.game.ultimaJugadaAprobada);
+        }
+      });
+      });
+  }
  
 
   return props.user && props.game && !props.game.comenzada ?
@@ -216,7 +249,7 @@ const Game = (props) => {
       {
         props.game.admin === props.user.username ?
           <div>
-            <button  className="btn"onClick={comenzar}>Comenzar partida</button>
+            <button  className="btn btn-outline-success" onClick={comenzar}>Comenzar partida</button>
           </div>
           :
           <div>
@@ -257,18 +290,19 @@ const Game = (props) => {
           <h5><strong>Jugador Turno actual:</strong> {props.game.turnos[props.game.turnoActual]}</h5>
           <h5><strong>Mi turno:</strong> {miTurno}</h5>
           <h5><strong>Ultima jugada:</strong> {props.game.ultimaJugada!==""? props.game.ultimaJugada:"No existe ultima jugada"}</h5>
+          <h5>Hay {numDados} dados en juego</h5>
           <h5>Proponer jugada:</h5>
 
           <form className="form">
-          <select onChange={onChangeSentido} className="browser-default custom-select custom-select-lg mb-3 form-control">
-            <option defaultValue>Selecciona la dirección de tu apuesta</option>
+          <select onChange={onChangeSentido} className="browser-default custom-select custom-select-lg mb-3 form-control" required>
+            <option value="">Selecciona la dirección de tu apuesta</option>
             <option value="0">Derecha</option>
             <option value="1">Izquierda</option>
           </select>
 
-          <input type="number" placeholder="Selecciona la cantidad" className="form-control" onChange={onChangeCantidad} step="1" max={numDados}  min="1"></input>
-          <select onChange={onChangePinta} className="browser-default custom-select custom-select-lg mb-3 form-control">
-            <option defaultValue>Selecciona pinta</option>
+          <input type="number" placeholder="Selecciona la cantidad" className="form-control" onChange={onChangeCantidad} step="1" max={numDados}  min="1" required></input>
+          <select onChange={onChangePinta} className="browser-default custom-select custom-select-lg mb-3 form-control" required>
+            <option value="">Selecciona pinta</option>
             <option value="as">As</option>
             <option value="pato">Pato</option>
             <option value="tren">Tren</option>
@@ -277,12 +311,13 @@ const Game = (props) => {
             <option value="cena">Cena</option>
           </select>
           <button type="submit"  onClick={proponerJugadaPrimera}  className="btn btn-primary">Apostar</button>
+          
             </form>
   
         </div>
 
 :
-props.game && props.game.comenzada && props.user.username===props.game.turnos[props.game.turnoActual] && props.game.sentidoRonda !== -1 
+props.game && props.game.comenzada && props.user.username===props.game.turnos[props.game.turnoActual] && props.game.sentidoRonda !== -1 && puedeApostar!=='false'
 ?
     // Vista de jugador en turno cuando no hay sentido definido
   <div>
@@ -297,13 +332,15 @@ props.game && props.game.comenzada && props.user.username===props.game.turnos[pr
     <h5><strong>Jugador Turno actual:</strong> {props.game.turnos[props.game.turnoActual]}</h5>
     <h5><strong>Mi turno:</strong> {miTurno}</h5>
     <h5><strong>Ultima jugada:</strong> {props.game.ultimaJugada!==""? props.game.ultimaJugada:"No existe ultima jugada"}</h5>
+    <button onClick={dudar}  className="btn btn-primary">Dudar</button>
+    <h5>Hay {numDados} dados en juego</h5>
     <h5>Proponer jugada:</h5>
 
     <form className="form">
-      <input type="number" placeholder="Selecciona la cantidad" className="form-control" onChange={onChangeCantidad} step="1" max={numDados} min="1"></input>
+      <input required type="number" placeholder="Selecciona la cantidad" className="form-control" onChange={onChangeCantidad} step="1" max={numDados} min="1"></input>
          
-    <select onChange={onChangePinta} className="browser-default custom-select custom-select-lg mb-3 form-control">
-      <option defaultValue>Selecciona pinta</option>
+    <select required onChange={onChangePinta} className="browser-default custom-select custom-select-lg mb-3 form-control">
+      <option value="">Selecciona pinta</option>
       <option value="as">As</option>
       <option value="pato">Pato</option>
       <option value="tren">Tren</option>
@@ -312,6 +349,48 @@ props.game && props.game.comenzada && props.user.username===props.game.turnos[pr
       <option value="cena">Cena</option>
     </select>
     <button type="submit"  onClick={proponerJugada}  className="btn btn-primary">Apostar</button>
+   
+          
+      </form>
+
+  </div>    
+
+:
+props.game && props.game.comenzada && props.user.username===props.game.turnos[props.game.turnoActual] && props.game.sentidoRonda !== -1 && puedeApostar==='false'
+?
+    // Vista de jugador en turno cuando no hay sentido definido
+  <div>
+    <button  className="btn btn-outline-success salir"onClick={salir}>Salir de partida</button>
+    <h3>Administrador: {props.game.admin}</h3>
+    <h4>Jugadores Actuales:</h4>
+    {
+      props.game.jugadores.map((element, i) => {
+        return <h5 className="jugador" key={i}><strong>Usuario:</strong> {element} </h5>;
+      })
+    }
+    <h5><strong>Jugador Turno actual:</strong> {props.game.turnos[props.game.turnoActual]}</h5>
+    <h5><strong>Mi turno:</strong> {miTurno}</h5>
+    <h5><strong>Ultima jugada:</strong> {props.game.ultimaJugada!==""? props.game.ultimaJugada:"No existe ultima jugada"}</h5>
+    <button onClick={dudar}  className="btn btn-primary">Dudar</button>
+    <h5>Hay {numDados} dados en juego</h5>
+    <p>No es una apuesta válida</p>
+    <h5>Proponer jugada:</h5>
+
+    <form className="form">
+      <input required type="number" placeholder="Selecciona la cantidad" className="form-control" onChange={onChangeCantidad} step="1" max={numDados} min="1"></input>
+         
+    <select required onChange={onChangePinta} className="browser-default custom-select custom-select-lg mb-3 form-control">
+      <option value="">Selecciona pinta</option>
+      <option value="as">As</option>
+      <option value="pato">Pato</option>
+      <option value="tren">Tren</option>
+      <option value="perro">Perro</option>
+      <option value="quina">Quina</option>
+      <option value="cena">Cena</option>
+    </select>
+    <button type="submit"  onClick={proponerJugada}  className="btn btn-primary">Apostar</button>
+   
+          
       </form>
 
   </div>    
@@ -330,9 +409,21 @@ props.game && props.game.comenzada && props.user.username===props.game.turnos[pr
           <h5><strong>Jugador Turno actual:</strong> {props.game.turnos[props.game.turnoActual]}</h5>
           <h5><strong>Mi turno</strong>: {miTurno}</h5>
           <h5><strong>Ultima jugada:</strong> {props.game.ultimaJugada!==""? props.game.ultimaJugada:"No existe ultima jugada"}</h5>
-          
+          <h5>Hay {numDados} dados en juego</h5>
 
         </div>
+
+
+
+
+
+
+
+
+
+
+
+
         : props.game && props.game.comenzada && props.game.sentidoRonda === 1 ?
         <div>
           <button className="btn btn-outline-success salir" onClick={salir}>Salir de partida</button>
@@ -346,7 +437,7 @@ props.game && props.game.comenzada && props.user.username===props.game.turnos[pr
           <h5><strong>Jugador Turno actual:</strong> {props.game.turnos[props.game.turnoActual]}</h5>
           <h5><strong>Mi turno</strong>: {miTurno}</h5>
           <h5><strong>Ultima jugada:</strong> {props.game.ultimaJugada!==""? props.game.ultimaJugada:"No existe ultima jugada"}</h5>
-          
+          <h5>Hay {numDados} dados en juego</h5>
         </div>
         :
         <div>
