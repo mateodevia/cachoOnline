@@ -90,11 +90,12 @@ Meteor.methods({
   joinPartida: function(idPartida, idJugador){
 
     let res= Partidas.findOne({_id:idPartida});
-    if(res.jugadores.length===6){
-      throw new Meteor.Error("El juego esta lleno");
-    }
-    else if(typeof(res)==="undefined"){
+
+    if(typeof(res)==="undefined"){
       throw new Meteor.Error("No existe la partida");
+    }
+    else if(res.jugadores.length===6){
+      throw new Meteor.Error("El juego esta lleno");
     }
     else if(res.comenzada){
       throw new Meteor.Error("La partida ya comenzó",Partidas.rawDatabase);
@@ -116,7 +117,7 @@ Meteor.methods({
       let apuesta = cantidad+" "+pinta;
       res.ultimaJugada = apuesta;
       Partidas.update({_id:idPartida},res);
-    //}   
+    //}
   },
   asignarSentido: function(idPartida, sentido) {
     let res= Partidas.findOne({_id:idPartida});
@@ -135,7 +136,7 @@ Meteor.methods({
       let b = res.jugadores.length;
       res.turnoActual = mod(a,b);
     }
-    Partidas.update({_id:idPartida},res);    
+    Partidas.update({_id:idPartida},res);
   },
   setDudarFalse: function(idPartida) {
     let res= Partidas.findOne({_id:idPartida});
