@@ -5,6 +5,9 @@ import { Meteor } from "meteor/meteor";
 
 const Game = (props) => {
   let jugadaAprobada = false;
+  let x= -1;
+  const [revise, setRevise] = useState(false);
+  const [misDados,setMisDados] = useState("");
   const [miTurno, setMiTurno] = useState(-1);
   const [cantidad, setCantidad] = useState(0);
   const [pinta, setPinta] = useState("");
@@ -22,7 +25,7 @@ const Game = (props) => {
       }
     }
   }
-
+  
   const comenzar = () => {
     if (props.game.jugadores.length <= 1) {
       alert("Deben agregarse jugadores a la partida para continuar");
@@ -151,13 +154,37 @@ const Game = (props) => {
           return alert(error.reason);
         }
         else {
-          console.log("result",result);
           jugadaAprobada = result;
-          console.log(jugadaAprobada);
           Meteor.call("resultadoDuda", jugadaAprobada, props.user.username, props.game._id);
         }
       });
   }
+  if(props.game && !revise) {
+    for(let i=0; i<props.game.turnos.length; ++i) {
+      if(props.game.turnos[i] === props.user.username) {
+        x=i;
+        setRevise(true);
+        break;
+      }
+    }
+  }
+
+  setInterval(()=> {
+    let temp = "";
+    if(props.game) {
+      if(props.game.dados) {
+        cantidadDados();
+        if(!revise) {
+          for(let i=0; i<props.game.dados[x].length;++i) {
+            temp+=props.game.dados[x][i]+" ";
+          }
+          setMisDados(temp);
+
+        }
+      }
+    }
+  },2000);
+
   return props.user && props.game && !props.game.comenzada ?
     // Inicio juego
     <div className="bienvenida">
@@ -188,7 +215,7 @@ const Game = (props) => {
       </div>
     </div>
     :
-    props.game && props.game.comenzada && props.user.username === props.game.turnos[props.game.turnoActual] && props.game.sentidoRonda === -1
+    props.game && props.game.comenzada && props.user.username === props.game.turnos[props.game.turnoActual] && props.game.sentidoRonda === -1 
       ?
       // Vista de jugador en turno cuando no hay sentido definido
 
@@ -238,6 +265,12 @@ const Game = (props) => {
               })
             }
             <div className="info"><h5><strong>Jugador Turno actual:</strong></h5><h5>{props.game.turnos[props.game.turnoActual]}</h5></div>
+            {misDados !== "" ?
+            <div className="info"><h5><strong>Tus dados:</strong></h5><h5>{misDados}</h5></div>
+            : 
+            <div></div>
+            }
+            
           </div>
         </div>
       </div>
@@ -288,6 +321,11 @@ const Game = (props) => {
               })
             }
             <div className="info"><h5><strong>Jugador Turno actual:</strong></h5><h5>{props.game.turnos[props.game.turnoActual]}</h5></div>
+            {misDados !== "" ?
+            <div className="info"><h5><strong>Tus dados:</strong></h5><h5>{misDados}</h5></div>
+            : 
+            <div></div>
+            }
            
           </div>
         </div>
@@ -317,6 +355,11 @@ const Game = (props) => {
               })
             }
             <div className="info"><h5><strong>Jugador Turno actual:</strong></h5><h5>{props.game.turnos[props.game.turnoActual]}</h5></div>
+            {misDados !== "" ?
+            <div className="info"><h5><strong>Tus dados:</strong></h5><h5>{misDados}</h5></div>
+            : 
+            <div></div>
+            }
             
           </div>
         </div>

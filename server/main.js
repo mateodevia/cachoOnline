@@ -10,7 +10,8 @@ Meteor.methods({
         nombre: nombre,
         partidasGanadas: 0,
         juegos: [],
-        onGame: false
+        onGame: false,
+        perdioDado: false
       },
       password: password
     })
