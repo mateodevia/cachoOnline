@@ -40,7 +40,7 @@ function shuffle(array) {
 function mod(a,b) {
   return (a % b + b)%b;
 }
-  
+
 function revolverDados(idPartida) {
   console.log("todo bien");
   let res= Partidas.findOne({_id:idPartida});
@@ -63,6 +63,7 @@ Meteor.methods({
       jugadores:[admin],
       turnos:[],
       numDados:[],
+      numDadosTotal:0,
       dados:[],
       terminada: false,
       ganador: undefined,
@@ -83,9 +84,12 @@ Meteor.methods({
     res.comenzada=true;
     res.turnos=shuffle(res.jugadores);
     let i,j;
+    let numDadosTotal=0;
     for (i = 0; i < res.jugadores.length; ++i) {
       res.numDados.push(6);
+      numDadosTotal+=6;
     }
+    res.numDadosTotal=numDadosTotal;
     for(j = 0; j < res.jugadores.length; ++j){
       res.dados.push(darDados(res.numDados[j]));
     }
@@ -127,11 +131,13 @@ Meteor.methods({
       res.ultimaJugada = apuesta;
       Partidas.update({_id:idPartida},res);
   },
+
   asignarSentido: function(idPartida, sentido) {
     let res= Partidas.findOne({_id:idPartida});
     res.sentidoRonda = sentido;
     Partidas.update({_id:idPartida},res);
   },
+
   cambiarTurno: function(idPartida) {
     let res= Partidas.findOne({_id:idPartida});
     if(res.sentidoRonda===0) {
@@ -144,9 +150,9 @@ Meteor.methods({
       let b = res.jugadores.length;
       res.turnoActual = mod(a,b);
     }
-    
     Partidas.update({_id:idPartida},res);
   },
+
   dudar: function(cantidad, pinta, idPartida) {
     let res= Partidas.findOne({_id:idPartida});
     let valorPinta = 0;
@@ -188,7 +194,8 @@ Meteor.methods({
       return false;
     }
   },
-  resultadoDuda: async function(result, username, idPartida) {
+
+  resultadoDuda: function(result, username, idPartida) {
     let res= Partidas.findOne({_id:idPartida});
     let turnos = res.turnos;
     let pos = -1;
@@ -202,7 +209,7 @@ Meteor.methods({
       }
     }
     let a = res.dados[pos];
-    
+
     let aLength = a.length;
     let jug = res.jugadores.length;
     console.log(a);

@@ -25,7 +25,7 @@ const Game = (props) => {
       }
     }
   }
-  
+
   const comenzar = () => {
     if (props.game.jugadores.length <= 1) {
       alert("Deben agregarse jugadores a la partida para continuar");
@@ -145,7 +145,7 @@ const Game = (props) => {
   }
 
   const dudar = () => {
-   
+
       let ultima = props.game.ultimaJugada;
       let ultimaCantidad = parseInt(ultima.split(" ")[0]);
       let ultimaPinta = ultima.split(" ")[1];
@@ -215,7 +215,7 @@ const Game = (props) => {
       </div>
     </div>
     :
-    props.game && props.game.comenzada && props.user.username === props.game.turnos[props.game.turnoActual] && props.game.sentidoRonda === -1 
+    props.game && props.game.comenzada && props.user.username === props.game.turnos[props.game.turnoActual] && props.game.sentidoRonda === -1
       ?
       // Vista de jugador en turno cuando no hay sentido definido
 
@@ -227,7 +227,7 @@ const Game = (props) => {
             <button className="btn btn-danger salir" onClick={salir}>Salir de partida</button>
             <h4><strong>Hay {numDados} dados en juego</strong></h4>
             <h5><strong>Ultima jugada:</strong> {props.game.ultimaJugada !== "" ? props.game.ultimaJugada : "No existe ultima jugada"}</h5>
-           
+
             <h5>Proponer jugada:</h5>
             <div className="row">
               <div className="col-8">
@@ -253,12 +253,12 @@ const Game = (props) => {
               </div>
               <div className="col-4"></div>
             </div>
-            
+
           </div>
           <div className="col">
             <h2>Administrador: {props.game.admin}</h2>
             <h2>Jugadores Actuales:</h2>
-            
+
             {
               props.game.jugadores.map((element, i) => {
                 return <h5 className="jugador" key={i}><strong>Usuario:</strong> {element} </h5>;
@@ -267,10 +267,10 @@ const Game = (props) => {
             <div className="info"><h5><strong>Jugador Turno actual:</strong></h5><h5>{props.game.turnos[props.game.turnoActual]}</h5></div>
             {misDados !== "" ?
             <div className="info"><h5><strong>Tus dados:</strong></h5><h5>{misDados}</h5></div>
-            : 
+            :
             <div></div>
             }
-            
+
           </div>
         </div>
       </div>
@@ -288,7 +288,7 @@ const Game = (props) => {
             <h4><strong>Hay {numDados} dados en juego</strong></h4>
             <h5><strong>Ultima jugada:</strong> {props.game.ultimaJugada !== "" ? props.game.ultimaJugada : "No existe ultima jugada"}</h5>
             <button onClick={dudar} className="btn btn-dark dudar">Dudar</button>
-           
+
             <h5>Proponer jugada:</h5>
             <div className="row">
               <div className="col-8">
@@ -309,12 +309,12 @@ const Game = (props) => {
               </div>
               <div className="col-4"></div>
             </div>
-            
+
           </div>
           <div className="col">
             <h2>Administrador: {props.game.admin}</h2>
             <h2>Jugadores Actuales:</h2>
-            
+
             {
               props.game.jugadores.map((element, i) => {
                 return <h5 className="jugador" key={i}><strong>Usuario:</strong> {element} </h5>;
@@ -323,19 +323,16 @@ const Game = (props) => {
             <div className="info"><h5><strong>Jugador Turno actual:</strong></h5><h5>{props.game.turnos[props.game.turnoActual]}</h5></div>
             {misDados !== "" ?
             <div className="info"><h5><strong>Tus dados:</strong></h5><h5>{misDados}</h5></div>
-            : 
+            :
             <div></div>
             }
-           
+
           </div>
         </div>
       </div>
-  
+
         :
         props.game && props.game.comenzada ?
-
-
-
 
         <div className="bienvenida">
         <h1>Estás en el juego {props.game._id}, {props.user.username}</h1>
@@ -348,7 +345,7 @@ const Game = (props) => {
           <div className="col">
             <h2>Administrador: {props.game.admin}</h2>
             <h2>Jugadores Actuales:</h2>
-            
+
             {
               props.game.jugadores.map((element, i) => {
                 return <h5 className="jugador" key={i}><strong>Usuario:</strong> {element} </h5>;
@@ -357,10 +354,10 @@ const Game = (props) => {
             <div className="info"><h5><strong>Jugador Turno actual:</strong></h5><h5>{props.game.turnos[props.game.turnoActual]}</h5></div>
             {misDados !== "" ?
             <div className="info"><h5><strong>Tus dados:</strong></h5><h5>{misDados}</h5></div>
-            : 
+            :
             <div></div>
             }
-            
+
           </div>
         </div>
       </div>
