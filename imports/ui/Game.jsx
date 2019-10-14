@@ -238,7 +238,6 @@ const Game = (props) => {
               })
             }
             <div className="info"><h5><strong>Jugador Turno actual:</strong></h5><h5>{props.game.turnos[props.game.turnoActual]}</h5></div>
-            
           </div>
         </div>
       </div>

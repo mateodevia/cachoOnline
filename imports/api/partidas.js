@@ -40,6 +40,18 @@ function shuffle(array) {
 function mod(a,b) {
   return (a % b + b)%b;
 }
+  
+function revolverDados(idPartida) {
+  console.log("todo bien");
+  let res= Partidas.findOne({_id:idPartida});
+  for(let i=0; i<res.numDados.length;++i) {
+    res.dados[i]=darDados(res.numDados[i]);
+    console.log(i, res.dados[i]);
+  }
+  Partidas.update({_id:idPartida},res);
+  console.log(res.dados);
+  return res.dados;
+}
 
 Meteor.methods({
 
@@ -176,7 +188,7 @@ Meteor.methods({
       return false;
     }
   },
-  resultadoDuda: function(result, username, idPartida) {
+  resultadoDuda: async function(result, username, idPartida) {
     let res= Partidas.findOne({_id:idPartida});
     let turnos = res.turnos;
     let pos = -1;
@@ -190,29 +202,58 @@ Meteor.methods({
       }
     }
     let a = res.dados[pos];
+    
     let aLength = a.length;
+    let jug = res.jugadores.length;
     console.log(a);
     res.sentidoRonda=-1;
     res.ultimaJugada = "";
     if(result) {
-      a.length = aLength-1;
+      res.dados[pos].length = aLength-1;
+      res.numDados[pos]=res.dados[pos].length;
+      res.dados=revolverDados(idPartida);
+      Partidas.update({_id:idPartida},res);
     }
     else {
+      console.log("else");
       if(sentido===0) {
-      res.turnoActual = pos-1;
-      let b = res.dados[pos-1];
+      let x = res.numDados[mod((pos-1),jug)];
+      res.turnoActual = mod((pos-1),jug);
+      let b = res.dados[mod((pos-1),jug)];
+      console.log(b);
       let bLength = b.length;
       b.length = bLength-1;
+      res.numDados[mod((pos-1),jug)]=res.dados[mod((pos-1),jug)].length;
+      console.log("ajaaa",res.dados[mod((pos-1),jug)]);
+      res.dados=revolverDados(idPartida);
+      Partidas.update({_id:idPartida},res);
       }
       else if(sentido===1) {
-       res.turnoActual = pos+1;
-       let b = res.dados[pos+1];
-       let bLength = b.length;
-       b.length = bLength-1;
+      let x = res.numDados[mod((pos+1),jug)];
+      res.turnoActual = mod((pos+1),jug);
+      let b = res.dados[mod((pos+1),jug)];
+      console.log(b);
+      let bLength = b.length;
+      b.length = bLength-1;
+      res.numDados[mod((pos+1),jug)]=dados[mod((pos+1),jug)].length;
+
+      console.log(res.dados[mod((pos+1),jug)]);
+      res.dados=revolverDados(idPartida);
+      Partidas.update({_id:idPartida},res);
       }
     }
-   
-    Partidas.update({_id:idPartida},res);
+  },
+  misDados: function(username, idPartida) {
+    let res= Partidas.findOne({_id:idPartida});
+    let turnos = res.turnos;
+    let pos=-1;
+    for(let i=0; i<turnos.length;++i) {
+      if(turnos[i]===username) {
+        pos=i;
+        break;
+      }
+    }
+    return res.dados[pos];
   }
 });
 
