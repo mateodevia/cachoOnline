@@ -42,3 +42,19 @@ a {
 .form button {
   margin-left: 0.5rem;
 }
+body {
+  font-family: 'Roboto', sans-serif;
+}
+body 
+h1 {
+  font-family: 'Fjalla One', sans-serif;
+  margin-left: 1rem;
+  margin-top: 1rem;
+}
+#navbar-brand {
+  font-family: 'Fjalla One', sans-serif;
+}
+
+.bienvenida {
+  margin-left: 1rem;
+}

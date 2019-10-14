@@ -164,7 +164,8 @@ const Game = (props) => {
   return props.user && props.game && !props.game.comenzada ?
     // Inicio juego
     <div>
-      <h1>Bienvenido al juego {props.game._id}, {props.user.username}</h1>
+    <h1>Bienvenido al juego {props.game._id}, {props.user.username}</h1>
+    <div className="bienvenida">
       <button className="btn btn-outline-success salir" onClick={salir}>Salir de partida</button>
       <h2>Administrador: {props.game.admin}</h2>
       <h2>Jugadores Actuales:</h2>
@@ -183,6 +184,7 @@ const Game = (props) => {
             Espere a que el administrador de la partida comience el juego!!
           </div>
       }
+    </div>
     </div>
     :
     props.game && props.game.comenzada && props.user.username === props.game.turnos[props.game.turnoActual] && props.game.sentidoRonda === -1
@@ -271,7 +273,6 @@ const Game = (props) => {
             <h5><strong>Jugador Turno actual:</strong> {props.game.turnos[props.game.turnoActual]}</h5>
             <h5><strong>Mi turno:</strong> {miTurno}</h5>
             <h5><strong>Ultima jugada:</strong> {props.game.ultimaJugada !== "" ? props.game.ultimaJugada : "No existe ultima jugada"}</h5>
-            <button onClick={dudar} className="btn btn-primary">Dudar</button>
             <h5>Hay {numDados} dados en juego</h5>
           </div>
           :

@@ -19,7 +19,10 @@ const Historial = (props) => {
     <h1>Histórico de juegos de {props.user.username}</h1>
     {
  props.user.profile.juegos.map((element, i) => {
-          return <h5 className="juego" key={i}><strong>id Juego:</strong> {element} </h5>;
+          return 
+          <div>
+          <h5 className="juego" key={i}><strong>id Juego:</strong> {element} </h5>
+          </div>;
         })
       }
   </div>
