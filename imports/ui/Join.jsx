@@ -31,9 +31,9 @@ class Login extends Component {
             No existe una partida con el link dado o el juego está lleno!
           </div>
           <form>
-            Id Game: <input className="form-control" onChange={this.onChangeIdGame.bind(this)} type="text" />
+            Id del juego: <input className="form-control" onChange={this.onChangeIdGame.bind(this)} type="text" />
           </form>
-          <button className="btn btn-outline-success" onClick={this.joinGame.bind(this)}>Join Game</button>
+          <button className="btn btn-dark" onClick={this.joinGame.bind(this)}>Unirte a juego</button>
         </div>
       );
     }
@@ -41,9 +41,9 @@ class Login extends Component {
       return (
         <div>
           <form>
-            Id Game: <input className="form-control" onChange={this.onChangeIdGame.bind(this)} type="text" />
+            Id del juego: <input className="form-control" onChange={this.onChangeIdGame.bind(this)} type="text" />
           </form>
-          <button className="btn btn-outline-success" onClick={this.joinGame.bind(this)}>Join Game</button>
+          <button className="btn btn-dark" onClick={this.joinGame.bind(this)}>Unirte a juego</button>
         </div>
       );
     }

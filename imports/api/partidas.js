@@ -57,8 +57,7 @@ Meteor.methods({
       turnoActual:-1,
       //sentido derecha: 0 --- sentido izquierda: 1
       sentidoRonda:-1,
-      ultimaJugada:"",
-      ultimaJugadaAprobada : false
+      ultimaJugada:""
     });
     let res2= Meteor.users.findOne({_id:this.userId});
     res2.profile.juegos.push(a);
@@ -112,12 +111,9 @@ Meteor.methods({
   apostar: function(cantidad, pinta, idPartida) {
     let res= Partidas.findOne({_id:idPartida});
     console.log(cantidad, pinta);
-
-    // if(res.ultimaJugadaAprobada) {
       let apuesta = cantidad+" "+pinta;
       res.ultimaJugada = apuesta;
       Partidas.update({_id:idPartida},res);
-    //}
   },
   asignarSentido: function(idPartida, sentido) {
     let res= Partidas.findOne({_id:idPartida});
@@ -136,11 +132,7 @@ Meteor.methods({
       let b = res.jugadores.length;
       res.turnoActual = mod(a,b);
     }
-    Partidas.update({_id:idPartida},res);
-  },
-  setDudarFalse: function(idPartida) {
-    let res= Partidas.findOne({_id:idPartida});
-    res.ultimaJugadaAprobada = false;
+    
     Partidas.update({_id:idPartida},res);
   },
   dudar: function(cantidad, pinta, idPartida) {
@@ -178,15 +170,49 @@ Meteor.methods({
     console.log("hay", contador, "de", pinta,  contador >= cantidad);
 
     if(contador >= cantidad) {
-     // Partidas.update({_id:idPartida},{$set:{ultimaJugadaAprobada:true}});
-      res.ultimaJugadaAprobada = true;
+      return true;
     }
     else {
-      //Partidas.update({_id:idPartida},{$set:{ultimaJugadaAprobada:false}});
-      res.ultimaJugadaAprobada = false;
+      return false;
     }
+  },
+  resultadoDuda: function(result, username, idPartida) {
+    let res= Partidas.findOne({_id:idPartida});
+    let turnos = res.turnos;
+    let pos = -1;
+    let sentido = res.sentidoRonda;
+    console.log("sentido", sentido);
+    console.log(username);
+    for(let i=0; i<turnos.length;++i) {
+      if(turnos[i]===username) {
+        pos=i;
+        break;
+      }
+    }
+    let a = res.dados[pos];
+    let aLength = a.length;
+    console.log(a);
+    res.sentidoRonda=-1;
+    res.ultimaJugada = "";
+    if(result) {
+      a.length = aLength-1;
+    }
+    else {
+      if(sentido===0) {
+      res.turnoActual = pos-1;
+      let b = res.dados[pos-1];
+      let bLength = b.length;
+      b.length = bLength-1;
+      }
+      else if(sentido===1) {
+       res.turnoActual = pos+1;
+       let b = res.dados[pos+1];
+       let bLength = b.length;
+       b.length = bLength-1;
+      }
+    }
+   
     Partidas.update({_id:idPartida},res);
-    console.log(res.ultimaJugadaAprobada);
   }
 });
 

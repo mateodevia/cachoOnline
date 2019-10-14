@@ -26,13 +26,13 @@ class SignedIn extends React.Component {
           ?
           <div className="row" id="containerSignedIn">
             <div className="col">
-             <button className="btn btn-outline-success" onClick={this.props.historial}>Histórico</button>
+             <button className="btn btn-dark" onClick={this.props.historial}>Histórico</button>
              <Leaderboard></Leaderboard>
-             {/* <button className="btn btn-outline-success" onClick={this.props.leader}>Leaderboard</button> */}
+             {/* <button className="btn btn-dark" onClick={this.props.leader}>Leaderboard</button> */}
             </div>
             <div className="col text-center" id="text-center">
-              <button className="btn btn-outline-success" onClick={this.crearJuego.bind(this)}>Nuevo Juego</button>
-              <button className="btn btn-outline-success" onClick={this.props.joinGame}>Únete a un juego</button>
+              <button className="btn btn-dark" onClick={this.crearJuego.bind(this)}>Nuevo Juego</button>
+              <button className="btn btn-dark" onClick={this.props.joinGame}>Únete a un juego</button>
             </div>
             
          </div>

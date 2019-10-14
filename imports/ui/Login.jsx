@@ -40,7 +40,7 @@ class Login extends Component {
           <div className="text-danger">
             Has introducido usuario o contraseña incorrectos
           </div>
-          <button className="btn"className="btn btn-outline-success" onClick={this.logIn.bind(this)}>Log in</button>
+          <button className="btn"className="btn btn-dark" onClick={this.logIn.bind(this)}>Log in</button>
         </div>
       );
     }
@@ -50,7 +50,7 @@ class Login extends Component {
           Usuario: <input className="form-control" onChange={this.onChangeUser.bind(this)} type="text" />
           Contraseña: <input className="form-control" onChange={this.onChangePass.bind(this)} type="password" />
         </form>
-        <button className="btn"className="btn btn-outline-success" onClick={this.logIn.bind(this)}>Inicia sesión</button>
+        <button className="btn"className="btn btn-dark" onClick={this.logIn.bind(this)}>Inicia sesión</button>
       </div>
     );
   }
