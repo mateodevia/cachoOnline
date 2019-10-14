@@ -7,6 +7,10 @@ http://cacho-online.herokuapp.com/
 
 * Develop a website where people can play the popular latinoamerican game Cacho with their friends.
 
+**Slides**
+
+* [Slides here](https://docs.google.com/presentation/d/1H-B3QHau8FV-J8fVcBQIjA3rkN0X3HOwv6GFBo0jfzY/edit#slide=id.g60121766ae_0_46)
+
 
 **Access to project**
 
