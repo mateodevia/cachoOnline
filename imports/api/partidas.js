@@ -115,7 +115,6 @@ Meteor.methods({
 
   apostar: function(cantidad, pinta, idPartida) {
     let res= Partidas.findOne({_id:idPartida});
-    console.log(cantidad, pinta);
       let apuesta = cantidad+" "+pinta;
       res.ultimaJugada = apuesta;
       Partidas.update({_id:idPartida},res);
@@ -173,8 +172,6 @@ Meteor.methods({
         }
       }
     }
-    console.log("La apuesta es", cantidad, pinta );
-    console.log("hay", contador, "de", pinta,  contador >= cantidad);
 
     if(contador >= cantidad) {
       return true;
@@ -189,8 +186,6 @@ Meteor.methods({
     let turnos = res.turnos;
     let pos = -1;
     let sentido = res.sentidoRonda;
-    console.log("sentido", sentido);
-    console.log(username);
     for(let i=0; i<turnos.length;++i) {
       if(turnos[i]===username) {
         pos=i;
@@ -216,7 +211,6 @@ Meteor.methods({
       let x = res.numDados[mod((pos-1),jug)];
       res.turnoActual = mod((pos-1),jug);
       let b = res.dados[mod((pos-1),jug)];
-      console.log(b);
       let bLength = b.length;
       b.length = bLength-1;
       res.numDados[mod((pos-1),jug)]=res.dados[mod((pos-1),jug)].length;
@@ -232,7 +226,6 @@ Meteor.methods({
       let x = res.numDados[mod((pos+1),jug)];
       res.turnoActual = mod((pos+1),jug);
       let b = res.dados[mod((pos+1),jug)];
-      console.log(b);
       let bLength = b.length;
       b.length = bLength-1;
       res.numDados[mod((pos+1),jug)]=dados[mod((pos+1),jug)].length;

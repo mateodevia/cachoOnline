@@ -45,7 +45,6 @@ const Game = (props) => {
   }
 
   const apostar = () => {
-    console.log(miTurno);
     let cantidad=numDadosApuesta;
     let ultima = props.game.ultimaJugada;
     let ultimaCantidad = parseInt(ultima.split(" ")[0]);
@@ -165,7 +164,7 @@ const Game = (props) => {
       </div>
     </div>
     :
-    props.game && props.game.comenzada && props.user.username === props.game.turnos[props.game.turnoActual] && props.game.sentidoRonda === -1
+    props.game && props.game.comenzada && props.user.username === props.game.turnos[props.game.turnoActual] && props.game.sentidoRonda === -1 && props.game.dados[miTurno]
       ?
       // Vista de jugador en turno cuando no hay sentido definido
 
@@ -215,14 +214,15 @@ const Game = (props) => {
               })
             }
             <div className="info"><h5><strong>Jugador Turno actual:</strong></h5><h5>{props.game.turnos[props.game.turnoActual]}</h5></div>
-            <div className="info"><h5><strong>Tus dados:</strong></h5><h5>{props.game.dados[miTurno]}</h5></div>
+
+            <div className="info"><h5><strong>Tus dados:</strong></h5><h5>{props.game.dados[miTurno].toString()}</h5></div>
 
           </div>
         </div>
       </div>
 
       :
-      props.game && props.game.comenzada && props.user.username === props.game.turnos[props.game.turnoActual] && props.game.sentidoRonda !== -1
+      props.game && props.game.comenzada && props.user.username === props.game.turnos[props.game.turnoActual] && props.game.sentidoRonda !== -1 && props.game.dados[miTurno]
         ?
         // Vista de jugador en turno cuando hay sentido definido
 
@@ -267,13 +267,13 @@ const Game = (props) => {
                 })
               }
               <div className="info"><h5><strong>Jugador Turno actual:</strong></h5><h5>{props.game.turnos[props.game.turnoActual]}</h5></div>
-              <div className="info"><h5><strong>Tus dados:</strong></h5><h5>{props.game.dados[miTurno]}</h5></div>
+              <div className="info"><h5><strong>Tus dados:</strong></h5><h5>{props.game.dados[miTurno].toString()}</h5></div>
             </div>
           </div>
         </div>
 
         :
-        props.game && props.game.comenzada ?
+        props.game && props.game.comenzada && props.game.dados[miTurno] ?
 
           <div className="bienvenida">
             <h1>Estás en el juego {props.game._id}, {props.user.username}</h1>
@@ -293,7 +293,7 @@ const Game = (props) => {
                   })
                 }
                 <div className="info"><h5><strong>Jugador Turno actual:</strong></h5><h5>{props.game.turnos[props.game.turnoActual]}</h5></div>
-                <div className="info"><h5><strong>Tus dados:</strong></h5><h5>{props.game.dados[miTurno]}</h5></div>
+                <div className="info"><h5><strong>Tus dados:</strong></h5><h5>{props.game.dados[miTurno].toString()}</h5></div>
               </div>
             </div>
           </div>
