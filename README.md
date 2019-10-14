@@ -20,7 +20,7 @@ http://cacho-online.herokuapp.com/
 
   2) Access to directory: ``cd cachoOnline``
 
-  3) Install dependencies in this folder: `ǹpm install``
+  3) Install dependencies in this folder: ``npm install``
 
   4) Install meteor 
       * For Linux/OSX : ``curl https://install.meteor.com/ | sh``
