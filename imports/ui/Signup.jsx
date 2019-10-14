@@ -17,6 +17,7 @@ class Login extends Component {
     }
     else{
       Meteor.call("crearUsuario",this.valueUser,this.valueId, this.valuePass);
+      Meteor.call("createLog", this.valueUser);
       Meteor.loginWithPassword(this.valueUser, this.valuePass,(err)=>{
         if(err) throw err;
         this.props.home();

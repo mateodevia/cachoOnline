@@ -41,17 +41,6 @@ function mod(a,b) {
   return (a % b + b)%b;
 }
 
-function revolverDados(idPartida) {
-  console.log("todo bien");
-  let res= Partidas.findOne({_id:idPartida});
-  for(let i=0; i<res.numDados.length;++i) {
-    res.dados[i]=darDados(res.numDados[i]);
-    console.log(i, res.dados[i]);
-  }
-  Partidas.update({_id:idPartida},res);
-  console.log(res.dados);
-  return res.dados;
-}
 
 Meteor.methods({
 
@@ -113,7 +102,7 @@ Meteor.methods({
       throw new Meteor.Error("El juego esta lleno");
     }
     else if(res.comenzada){
-      throw new Meteor.Error("La partida ya comenzó",Partidas.rawDatabase);
+      throw new Meteor.Error("La partida ya comenzó");
     }
     else{
       res.jugadores.push(idJugador);
@@ -208,21 +197,21 @@ Meteor.methods({
         break;
       }
     }
-    let a = res.dados[pos];
-
-    let aLength = a.length;
     let jug = res.jugadores.length;
-    console.log(a);
     res.sentidoRonda=-1;
     res.ultimaJugada = "";
     if(result) {
-      res.dados[pos].length = aLength-1;
-      res.numDados[pos]=res.dados[pos].length;
-      res.dados=revolverDados(idPartida);
+      //res.dados[pos].length = aLength-1;
+      res.numDados[pos]=res.dados[pos].length-1;
+      res.dados=[];
+      res.numDadosTotal=0;
+      for(j = 0; j < jug; ++j){
+        res.dados.push(darDados(res.numDados[j]));
+        res.numDadosTotal+=res.numDados[j];
+      }
       Partidas.update({_id:idPartida},res);
     }
     else {
-      console.log("else");
       if(sentido===0) {
       let x = res.numDados[mod((pos-1),jug)];
       res.turnoActual = mod((pos-1),jug);
@@ -231,8 +220,12 @@ Meteor.methods({
       let bLength = b.length;
       b.length = bLength-1;
       res.numDados[mod((pos-1),jug)]=res.dados[mod((pos-1),jug)].length;
-      console.log("ajaaa",res.dados[mod((pos-1),jug)]);
-      res.dados=revolverDados(idPartida);
+      res.dados=[];
+      res.numDadosTotal=0;
+      for(j = 0; j < jug; ++j){
+        res.dados.push(darDados(res.numDados[j]));
+        res.numDadosTotal+=res.numDados[j];
+      }
       Partidas.update({_id:idPartida},res);
       }
       else if(sentido===1) {
@@ -243,24 +236,15 @@ Meteor.methods({
       let bLength = b.length;
       b.length = bLength-1;
       res.numDados[mod((pos+1),jug)]=dados[mod((pos+1),jug)].length;
-
-      console.log(res.dados[mod((pos+1),jug)]);
-      res.dados=revolverDados(idPartida);
+      res.dados=[];
+      res.numDadosTotal=0;
+      for(j = 0; j < jug; ++j){
+        res.dados.push(darDados(res.numDados[j]));
+        res.numDadosTotal+=res.numDados[j];
+      }
       Partidas.update({_id:idPartida},res);
       }
     }
-  },
-  misDados: function(username, idPartida) {
-    let res= Partidas.findOne({_id:idPartida});
-    let turnos = res.turnos;
-    let pos=-1;
-    for(let i=0; i<turnos.length;++i) {
-      if(turnos[i]===username) {
-        pos=i;
-        break;
-      }
-    }
-    return res.dados[pos];
   }
 });
 
