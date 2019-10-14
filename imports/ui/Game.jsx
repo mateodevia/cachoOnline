@@ -146,6 +146,7 @@ const Game = (props) => {
 
   const dudar = () => {
 
+
       let ultima = props.game.ultimaJugada;
       let ultimaCantidad = parseInt(ultima.split(" ")[0]);
       let ultimaPinta = ultima.split(" ")[1];
