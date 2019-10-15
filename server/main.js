@@ -2,8 +2,10 @@ import { Meteor } from 'meteor/meteor';
 import { Accounts } from "meteor/accounts-base";
 import '../imports/api/partidas.js';
 import '../imports/api/board.js';
+import { WebApp } from "meteor/webapp";
 
 Meteor.methods({
+  WebApp.addHtmlAttributeHook(() => ({ lang: "en" }));
   crearUsuario: function (user, nombre, password) {
     Accounts.createUser({
       username: user,
