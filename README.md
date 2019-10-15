@@ -53,14 +53,13 @@ http://cacho-online.herokuapp.com/
 **Screenshots**
 
 ![Captura 1](https://i.ibb.co/5xK6NNN/Captura1.png)
-![Captura 2](https://i.ibb.co/5xK6NNN/Captura2.png)
-![Captura 3](https://i.ibb.co/5xK6NNN/Captura3.png)
-![Captura 4](https://i.ibb.co/5xK6NNN/Captura4.png)
-![Captura 5](https://i.ibb.co/5xK6NNN/Captura5.png)
-![Captura 6](https://i.ibb.co/5xK6NNN/Captura6.png)
-![Captura 7](https://i.ibb.co/5xK6NNN/Captura7.png)
-![Captura 8](https://i.ibb.co/5xK6NNN/Captura8.png)
-
+![Captura 2](https://i.ibb.co/ss4kv8v/Captura2.png)
+![Captura 3](https://i.ibb.co/Nm8gGpk/Captura3.png)
+![Captura 4](https://i.ibb.co/wwMpkZH/Captura4.png)
+![Captura 5](https://i.ibb.co/6FKCDks/Captura5.png)
+![Captura 6](https://i.ibb.co/MZbgyNk/Captura6.png)
+![Captura 7](https://i.ibb.co/vvJtXtr/Captura7.png)
+![Captura 8](https://i.ibb.co/NjVQRxk/Captura8.png)
 
 ## MIT LICENSE
 
