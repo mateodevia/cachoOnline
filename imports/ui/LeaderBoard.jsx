@@ -29,6 +29,6 @@ export default AppWrapper = withTracker(() => {
   Meteor.subscribe("theBoard");
   return {
     user: Meteor.user(),
-    board: Board.find({}, { sort: { juegosGanados: 1 } }).fetch()
+    board: Board.find({}, { sort: { juegosGanados: -1 } }).fetch()
   };
 })(LeaderBoard);

@@ -1,10 +1,11 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState} from "react";
 import { withTracker } from "meteor/react-meteor-data";
 import { Partidas } from '../api/partidas.js';
 import { Meteor } from "meteor/meteor";
 
 const Game = (props) => {
   const [miTurno, setMiTurno] = useState(-1);
+  const [turnoultimoJugador, setTurnoUltimoJugador] = useState(-1);
   const [pinta, setPinta] = useState("");
   const [sentido, setSentido] = useState(-1);
   const [numDadosApuesta, setNumDadosApuesta]= useState(0);
@@ -19,6 +20,17 @@ const Game = (props) => {
     }
   }
 
+  if(props.game && props.game.comenzada && props.game.ultimoJugadorSacado===props.user.username){
+    alert("Has perdido. Serás redirigido a la pagina principal");
+    props.home();
+  }
+
+  if(props.game && props.game.comenzada && props.game.turnoUltimoJugador!== turnoultimoJugador && props.game.ultimoJugadorSacado!=="" && props.game.turnoUltimoJugador< miTurno && miTurno!==-1){
+    setMiTurno(miTurno-1);
+    setTurnoUltimoJugador(props.game.turnoUltimoJugador);
+  }
+
+
   const comenzar = () => {
     if (props.game.jugadores.length <= 1) {
       alert("Deben agregarse jugadores a la partida para continuar");
@@ -29,6 +41,10 @@ const Game = (props) => {
   }
 
   const salir = () => {
+
+    Meteor.call("sacarJugador",miTurno, props.game._id)
+    Meteor.call("verificarGanador", props.game._id);
+    props.home()
 
   }
 
@@ -91,18 +107,18 @@ const Game = (props) => {
     }
 
     let x = (ultimaCantidad * 2) + 1;
-    if ((valorUltimaPinta === 0) ||
+    if ((cantidad <= props.game.numDadosTotal)&&((valorUltimaPinta === 0) ||
       (cantidad > ultimaCantidad && valorPinta !== 1 && valorUltimaPinta !== 1) ||
       (cantidad > ultimaCantidad && valorPinta === 1 && valorUltimaPinta === 1) ||
       (cantidad >= Math.floor(ultimaCantidad / 2) + 1 && valorPinta === 1 && valorUltimaPinta !== 1) ||
       (cantidad === ultimaCantidad && valorPinta > valorUltimaPinta) ||
       (cantidad >= Math.floor(ultimaCantidad / 2) + 1 && valorPinta === 1 && valorUltimaPinta !== 1) ||
-      (cantidad >= x && valorPinta !== 1 && valorUltimaPinta === 1)) {
+      (cantidad >= x && valorPinta !== 1 && valorUltimaPinta === 1))) {
       Meteor.call("apostar", cantidad, pinta, props.game._id);
       Meteor.call("cambiarTurno", props.game._id);
     }
     else {
-      alert("Apuesta no valida! Repita la apuesta")
+      alert("Apuesta no valida! Repita la apuesta");
     }
   }
 
@@ -128,7 +144,16 @@ const Game = (props) => {
         return alert(error.reason);
       }
       else {
-        Meteor.call("resultadoDuda", result, props.user.username, props.game._id);
+        Meteor.call("resultadoDuda", result, props.user.username, props.game._id,(err, result)=>{
+          if(error){
+            return alert(error.reason);
+          }
+          else{
+            if(result){
+              Meteor.call("verificarGanador", props.game._id);
+            }
+          }
+        });
       }
     });
   }
@@ -164,7 +189,7 @@ const Game = (props) => {
       </div>
     </div>
     :
-    props.game && props.game.comenzada && props.user.username === props.game.turnos[props.game.turnoActual] && props.game.sentidoRonda === -1 && props.game.dados[miTurno]
+    props.game && props.game.comenzada && !props.game.terminada && props.user.username === props.game.turnos[props.game.turnoActual] && props.game.sentidoRonda === -1 && props.game.dados[miTurno]
       ?
       // Vista de jugador en turno cuando no hay sentido definido
 
@@ -222,7 +247,7 @@ const Game = (props) => {
       </div>
 
       :
-      props.game && props.game.comenzada && props.user.username === props.game.turnos[props.game.turnoActual] && props.game.sentidoRonda !== -1 && props.game.dados[miTurno]
+      props.game && props.game.comenzada && !props.game.terminada && props.user.username === props.game.turnos[props.game.turnoActual] && props.game.sentidoRonda !== -1 && props.game.dados[miTurno]
         ?
         // Vista de jugador en turno cuando hay sentido definido
 
@@ -273,7 +298,7 @@ const Game = (props) => {
         </div>
 
         :
-        props.game && props.game.comenzada && props.game.dados[miTurno] ?
+        props.game && props.game.comenzada &&!props.game.terminada && props.game.dados[miTurno] ?
 
           <div className="bienvenida">
             <h1>Estás en el juego {props.game._id}, {props.user.username}</h1>
@@ -296,6 +321,12 @@ const Game = (props) => {
                 <div className="info"><h5><strong>Tus dados:</strong></h5><h5>{props.game.dados[miTurno].toString()}</h5></div>
               </div>
             </div>
+          </div>
+          : props.game && props.game.terminada && props.game.dados[miTurno] ?
+          <div>
+            <h1>El juego {props.game._id} ha terminado</h1>
+            <h2>Ganador: {props.game.ganador}</h2>
+            <button className="btn btn-danger salir" onClick={salir}>Salir de partida</button>
           </div>
           :
           <div>

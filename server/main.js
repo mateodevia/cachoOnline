@@ -10,7 +10,8 @@ Meteor.methods({
       profile: {
         nombre: nombre,
         partidasGanadas: 0,
-        juegos: [],
+        juegoActivo:"",
+        juegosHistoricos:[],
         onGame: false,
         perdioDado: false
       },

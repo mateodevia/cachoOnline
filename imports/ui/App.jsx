@@ -56,7 +56,7 @@ const App = (props) => {
     <Route exact path="/login" render={()=><Login home={home} />}/>
     <Route exact path="/signup" render={() => <Signup home={home}/>}/>
     <Route exact path="/joinGame" render={()=><Join joinGameNow={joinGameNow}/>}/>
-    <Route path="/game/:gameId" component={Game}/>
+    <Route path="/game/:gameId" render={({match})=><Game home={home} match={match}/>}/>
     <Route exact path="/historial" component={Historial}/>
     <Route exact path="/leaderboard" component={LeaderBoard}/>
   </div>);
